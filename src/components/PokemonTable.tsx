@@ -1,0 +1,96 @@
+import React, { useState } from "react";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import { Pokemon } from "../api/pokemonApi";
+
+interface PokemonTableProps {
+  pokemonData: Pokemon[];
+  handleOpenModal: (pokemon: Pokemon) => void;
+}
+
+const PokemonTable: React.FC<PokemonTableProps> = ({ pokemonData, handleOpenModal }) => {
+  const [sortBy, setSortBy] = useState<string>("");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const sortData = (key: string) => {
+    if (sortBy === key) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortBy(key);
+      setSortOrder("asc");
+    }
+  };
+
+  const sortedData = [...pokemonData].sort((a, b) => {
+    if (sortBy === "name") {
+      return sortOrder === "asc" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
+    } else if (sortBy === "height" || sortBy === "weight" || sortBy === "base_experience") {
+      return sortOrder === "asc" ? a[sortBy] - b[sortBy] : b[sortBy] - a[sortBy];
+    }
+    return 0;
+  });
+  function capitalizeFirstLetter(str: string) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+  return (
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell onClick={() => sortData("name")} sx={{ cursor: "pointer" }} title="Click to sort by name">
+              Name {sortBy === "name" && (sortOrder === "asc" ? "▲" : "▼")}
+            </TableCell>
+            <TableCell onClick={() => sortData("height")} sx={{ cursor: "pointer" }} title="Click to sort by height">
+              Height {sortBy === "height" && (sortOrder === "asc" ? "▲" : "▼")}
+            </TableCell>
+            <TableCell onClick={() => sortData("weight")} sx={{ cursor: "pointer" }} title="Click to sort by weight">
+              Weight {sortBy === "weight" && (sortOrder === "asc" ? "▲" : "▼")}
+            </TableCell>
+            <TableCell onClick={() => sortData("base_experience")} sx={{ cursor: "pointer" }} title="Click to sort by base experience">
+              Base Experience {sortBy === "base_experience" && (sortOrder === "asc" ? "▲" : "▼")}
+            </TableCell>
+            <TableCell>Abilities</TableCell>
+            <TableCell>Types</TableCell>
+            <TableCell>Number of Moves</TableCell>
+            <TableCell>Base Stats</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {sortedData.map((pokemon, index) => (
+            <TableRow key={index} onClick={() => handleOpenModal(pokemon)} style={{ cursor: "pointer" }}>
+              <TableCell>{capitalizeFirstLetter(pokemon.name)}</TableCell>
+              <TableCell>{pokemon.height}</TableCell>
+              <TableCell>{pokemon.weight}</TableCell>
+              <TableCell>{pokemon.base_experience}</TableCell>
+              <TableCell>
+                {pokemon.abilities.map((abilityObj, index) => (
+                  <span key={index}>
+                    {abilityObj.ability.name}
+                    {index < pokemon.abilities.length - 1 && ", "}
+                  </span>
+                ))}
+              </TableCell>
+              <TableCell>
+                {pokemon.types.map((typeObj, index) => (
+                  <span key={index}>
+                    {typeObj.type.name}
+                    {index < pokemon.types.length - 1 && ", "}
+                  </span>
+                ))}
+              </TableCell>
+              <TableCell>{pokemon.moves.length}</TableCell>
+              <TableCell>
+                {pokemon.stats.map((stat, index) => (
+                  <span key={index}>
+                    {stat.stat.name}: {stat.base_stat}
+                    {index < pokemon.stats.length - 1 && ", "}
+                  </span>
+                ))}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+};
+
+export default PokemonTable;

@@ -11,6 +11,14 @@ Welcome to the Pokemon Data App! This application allows users to browse and exp
 - **Sorting**: Sort Pokemon data based on various attributes such as name, height, weight, base experience, and number of moves.
 - **Modal View**: Click on a Pokemon to view additional details in a modal window.
 
+## how to sort example:
+
+To sort the Pokemon list by the number of moves:
+
+1. Click on the "Number of Moves" column header in the Pokemon table.
+2. The table will be sorted in ascending order based on the number of moves.
+3. Click on the column header again to toggle between ascending and descending order.
+
 ## Technologies Used
 
 - **React**: The frontend of the application is built using the React library, providing a dynamic and efficient user interface.
@@ -18,6 +26,7 @@ Welcome to the Pokemon Data App! This application allows users to browse and exp
 - **Axios**: Axios is used for making HTTP requests to fetch Pokemon data from the PokeAPI.
 - **TypeScript**: The application is developed using TypeScript, providing static type checking and enhanced code readability.
 - **CSS**: Custom CSS styles are used for additional styling and layout adjustments.
+- **CSS Modules**
 
 ## Setup Instructions
 
